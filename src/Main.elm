@@ -5,10 +5,11 @@
 module Main exposing (..)
 
 import Html exposing (..)
-import Card exposing (Card, card, Deck)
+import Card exposing (Card, card)
 import Views.Cards as Cards exposing (..)
 
-main : Program Never Deck Msg
+
+main : Program Never Deck Message
 main =
     Html.program
         { init = init
@@ -21,11 +22,10 @@ main =
 
 -- MODEL
 
+type alias Deck = List Card
 
 
-
-
-init : ( Deck, Cmd Msg )
+init : ( Deck, Cmd Message )
 init =
     let
         cards =
@@ -34,36 +34,41 @@ init =
             , card 'c'
             ]
     in
-        ( { cards = cards }, Cmd.none )
+        (  cards, Cmd.none )
 
 
 
 -- UPDATE
 
 
-type Msg
-    = Flip Int
+flip : Card -> Deck-> Deck 
+flip card deck =
+  List.map
+      (\c -> if c == card then { face = c.face, up = True } else c)
+      deck
 
-
-update : Msg -> Deck -> ( Deck, Cmd Msg )
+update : Message -> Deck -> ( Deck, Cmd Message )
 update msg deck =
     case msg of
-        Flip i ->
-            ( deck, Cmd.none )
+        Flip card ->
+            ( (flip card deck),  Cmd.none )
 
 
 
 -- SUBSCRIPTIONS
 
 
-subscriptions : Deck -> Sub Msg
+subscriptions : Deck -> Sub Message
 subscriptions deck =
     Sub.none
 
+
+
 -- Views
 
-view : Deck -> Html Msg
+
+view : Deck -> Html Message
 view deck =
     div []
-        [ ul [] (List.map cards deck.cards)
+        [ ul [] (List.map cards deck)
         ]

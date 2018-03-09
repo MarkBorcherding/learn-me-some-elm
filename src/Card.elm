@@ -1,8 +1,4 @@
-module Card exposing (Card, card, Deck)
-
-type alias Deck =
-    { cards : List Card
-    }
+module Card exposing (Card, card)
 
 
 type alias Card =

@@ -1,7 +1,12 @@
-module Views.Cards exposing (cards)
+module Views.Cards exposing (cards, Message(Flip))
 
 import Html exposing (..)
-import Card exposing (Deck, Card)
+import Html.Events exposing (onClick)
+import Card exposing (Card)
+
+
+type Message
+    = Flip Card
 
 
 upOrDown : Bool -> String
@@ -14,10 +19,14 @@ upOrDown b =
             "Down"
 
 
-cards : Card -> Html msg
+cardText : Card -> String
+cardText card =
+    (String.fromChar card.face)
+        ++ " - "
+        ++ (upOrDown card.up)
+
+
+cards : Card -> Html Message
 cards card =
     li []
-        [ text (String.fromChar card.face)
-        , text "-"
-        , text (upOrDown card.up)
-        ]
+        [ button [ onClick (Flip card) ] [ text <| cardText card ] ]
